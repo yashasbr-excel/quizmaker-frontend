@@ -1,0 +1,35 @@
+---
+alwaysApply: false
+description: "When to code vs when to ask (frontend)"
+---
+
+# Coding Orchestration Rules (Frontend)
+
+## When to Code vs. When to Ask
+
+The user decides when **coding** (source code changes) happens. This project is a **separate entity**; changes here do not require changes in any backend unless the user says so.
+
+### What Counts as "Coding" (Requires Permission)
+- Modifying .tsx, .ts, .css, or config that affects build/runtime
+- Creating new components, pages, or utilities
+- Changing routing or API client usage
+- Updating dependencies or Vite/TS config
+
+### What Does NOT Require Permission
+- Updating documentation (.md, .mdc) or Cursor rules
+- Writing explanations or proposals
+- Fixing lint/formatting errors in code you were asked to change
+
+### Code ONLY When You See Explicit Instructions
+- "Implement this", "Add this", "Fix this", "Create this"
+- "Go ahead and code", "Proceed with [task]", "Start coding"
+
+### DO NOT Code When
+- User only asks a question or describes a problem without asking for a change
+- User says "What do you think?" or "How should we handle this?"
+- During review unless user asks to implement feedback
+
+### When Unsure
+1. Explain the approach.
+2. Ask: "Should I proceed with implementing this?"
+3. Wait for clear approval.

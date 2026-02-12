@@ -1,0 +1,87 @@
+---
+description: "Frontend conventions (React 19, Vite, Tailwind)"
+globs: ["**/*.tsx", "**/*.ts", "**/*.css"]
+---
+
+# Frontend Rules
+
+## Overview
+This app is **React 19 + TypeScript** with **Vite 6** and **Tailwind CSS v4**. It consumes a BFF API (proxy in dev). No authentication in this baseline. This project is a **separate entity**; changes here do not require changes in any backend unless the user says so.
+
+## Technology Stack
+- React 19 (functional components, hooks)
+- TypeScript 5.x
+- Vite 6
+- React Router 7
+- Tailwind CSS v4
+- Node 22+
+
+## Directory Structure
+```
+src/
+├── components/    # Reusable UI (Layout, WelcomeMessage, etc.)
+├── pages/         # Route-level pages (HomePage, OwnersPage, VetsPage, etc.)
+├── lib/           # api.ts (BFF client), text.ts (formatting helpers)
+├── types/         # api.ts (DTO types for API responses)
+├── App.tsx
+├── main.tsx
+└── index.css      # Tailwind import + custom utilities
+```
+
+## Component Pattern
+
+### Pages
+- Live in `src/pages/`.
+- Use **function components** and **hooks** (`useState`, `useEffect`).
+- Fetch data via `api` from `@/lib/api`; handle loading and error state.
+- Use React Router `useParams`, `Link`, `useLocation` as needed.
+
+### Reusable Components
+- Live in `src/components/`.
+- Receive props; no global state (context only if justified).
+- Use Tailwind utility classes and shared classes from `index.css` (e.g. `.card`, `.btn-primary`, `.label`).
+
+## API Client
+
+### Location and Usage
+- **Client:** `src/lib/api.ts` — `api.welcome()`, `api.owners.list()`, `api.owners.get(id)`, `api.vets.list()`, etc.
+- **Types:** `src/types/api.ts` — `OwnerDto`, `PetDto`, `VetDto`, `VisitDto`, `PetTypeDto`, `SpecialtyDto`.
+- In dev, Vite proxies `/api` to backend; use relative URLs like `/api/owners`.
+
+```ts
+import { api } from "@/lib/api";
+const owners = await api.owners.list();
+const owner = await api.owners.get(Number(id));
+```
+
+## Routing
+- **Setup:** `BrowserRouter`, `Routes`, `Route` in `App.tsx`.
+- **Layout:** `Layout` component with `Outlet` and header nav; routes render inside it.
+- **Paths:** `/` (Home), `/owners`, `/owners/:id`, `/vets`.
+- **Links:** Use `<Link to="...">` from `react-router-dom`; style with `.link` or `.link-muted` where defined.
+
+## Styling
+
+### Tailwind
+- Use Tailwind utility classes; prefer design tokens from `index.css` where available.
+- **Shared classes in index.css:** `.page-title`, `.section-title`, `.label`, `.card`, `.btn-primary`, `.btn-secondary`, `.link`, `.input`, `.table-header`, `.table-cell`, `.table-cell-muted`.
+
+### Text and Casing
+- **Labels:** Uppercase, small, tracked (use `.label`).
+- **Display names:** Use `formatName(first, last)` from `@/lib/text`.
+- **Pet types / specialties:** Use `capitalizeWords(s)` from `@/lib/text` (e.g. "radiology" → "Radiology").
+
+### Responsiveness
+- Use `sm:`, `md:` breakpoints for layout and spacing where needed.
+- Keep tables horizontally scrollable on small screens (`overflow-x-auto`).
+
+## Path Alias
+- `@/` maps to `src/` (e.g. `import { api } from "@/lib/api"`).
+- Configured in `vite.config.ts` and `tsconfig.json`.
+
+## Important Conventions
+- **Functional components and hooks only** (no class components).
+- **TypeScript:** Define props and state types; use types from `@/types/api` for API data.
+- Always handle **loading** and **error** states when fetching.
+- Use **semantic HTML** and accessibility (e.g. `aria-label`, `sr-only` where appropriate).
+- Keep new components and pages under `src/components` and `src/pages`; keep `lib` and `types` minimal and focused.
